@@ -153,46 +153,68 @@ public class TestEyeActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void up() {
-        //已经错误一次
-        if (checkErrorTimes()) {
-            mUserList.add(new Item(mIndex, mDirect, mDirect == DIRECT_UP ? DIRECT_UP : DIRECT_UNCLEAR));
-            next(mDirect == DIRECT_UP);
+
+        final boolean flag = mDirect == DIRECT_UP;
+
+        //已经错误一次 且本次也错误
+        if (!checkErrorTimes() && !flag) {
+            showResult();
+            return;
         }
+        mUserList.add(new Item(mIndex, mDirect, mDirect == DIRECT_UP ? DIRECT_UP : DIRECT_UNCLEAR));
+        next(flag);
     }
 
     private void down() {
-        //已经错误一次
-        if (checkErrorTimes()) {
-            mUserList.add(new Item(mIndex, mDirect, mDirect == DIRECT_DOWN ? DIRECT_DOWN : DIRECT_UNCLEAR));
-            next(mDirect == DIRECT_DOWN);
+        final boolean flag = mDirect == DIRECT_DOWN;
+
+        //已经错误一次 且本次也错误
+        if (!checkErrorTimes() && !flag) {
+            showResult();
+            return;
         }
+        mUserList.add(new Item(mIndex, mDirect, flag? DIRECT_DOWN : DIRECT_UNCLEAR));
+        next(flag);
+
     }
 
     private void left() {
-        //已经错误一次
-        if (checkErrorTimes()) {
-            mUserList.add(new Item(mIndex, mDirect, mDirect == DIRECT_LEFT ? DIRECT_LEFT : DIRECT_UNCLEAR));
-            next(mDirect == DIRECT_LEFT);
+        final boolean flag = mDirect == DIRECT_LEFT;
+
+        //已经错误一次 且本次也错误
+        if (!checkErrorTimes() && !flag) {
+            showResult();
+            return;
         }
+        mUserList.add(new Item(mIndex, mDirect, flag ? DIRECT_LEFT : DIRECT_UNCLEAR));
+        next(flag);
+
     }
 
     private void right() {
-        //已经错误一次
-        if (checkErrorTimes()) {
-            mUserList.add(new Item(mIndex, mDirect, mDirect == DIRECT_RIGHT ? DIRECT_RIGHT : DIRECT_UNCLEAR));
-            next(mDirect == DIRECT_RIGHT);
+        final boolean flag = mDirect == DIRECT_RIGHT;
+        //已经错误一次 且本次也错误
+        if (!checkErrorTimes() && !flag) {
+            showResult();
+            return;
         }
+
+        mUserList.add(new Item(mIndex, mDirect, flag ? DIRECT_RIGHT : DIRECT_UNCLEAR));
+        next(flag);
+
     }
 
     /**
      * 看不清楚 两次后终止
      */
     private void unClear() {
-        //已经错误一次
-        if (checkErrorTimes()) {
-            mUserList.add(new Item(mIndex, mDirect, DIRECT_UNCLEAR));
-            next(false);
+        //已经错误一次 再次错误
+        if (!checkErrorTimes()) {
+            showResult();
+            return;
         }
+        mUserList.add(new Item(mIndex, mDirect, DIRECT_UNCLEAR));
+        next(false);
     }
 
 
@@ -206,7 +228,6 @@ public class TestEyeActivity extends AppCompatActivity implements View.OnClickLi
         for (Item item : mUserList) {
             int index = item.getIndex();
             if (index == mIndex && item.getUser_direct() == DIRECT_UNCLEAR) {
-                showResult();
                 flag = false;
                 break;
             }
@@ -397,10 +418,10 @@ public class TestEyeActivity extends AppCompatActivity implements View.OnClickLi
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
             // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
             // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
+            //  if (SpeechEvent.EVENT_SESSION_ID == eventType) {
+            //      String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
+            //      Log.d(TAG, "session id =" + sid);
+            //  }
         }
 
     };
